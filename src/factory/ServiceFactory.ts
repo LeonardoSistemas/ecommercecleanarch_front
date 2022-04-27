@@ -1,5 +1,6 @@
 import HttpClient from "@/infra/HttpClient";
 import ItemsService from "@/service/ItemsService";
+import OrdersService from "@/service/OrdersServices";
 
 export default class ServiceFactory {
 
@@ -7,5 +8,9 @@ export default class ServiceFactory {
 
     createItemsService() : ItemsService {
         return new ItemsService(this.httpClient, this.baseUrl);
+    }
+
+    createOrdersService() : OrdersService {
+        return new OrdersService(this.httpClient, this.baseUrl);
     }
 }
