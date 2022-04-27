@@ -2,12 +2,21 @@
 import {onMounted, reactive} from 'vue';
 import Order from '@/domain/entity/Order';
 import Item from '@/domain/entity/Item';
+import FormatterService from '@/service/FormatterService';
+
 
 const { serviceFactory} = defineProps(["serviceFactory"]);
 
 const items : Item[] = reactive([]);
 const itemsIndex: { [idItem: number]: Item } = reactive({});
 const order : Order = reactive(new Order());
+const formatMoney = FormatterService.formatMoney;
+
+const placeOrder = async function (order : Order) {
+  const ordersService = serviceFactory.createOrdersService();
+  const output = await ordersService.placeOrder(order);
+  order.setCode(output.code);
+}
 
 
 onMounted(async()=>{
@@ -40,21 +49,29 @@ onMounted(async()=>{
     <div class="col-md-3 order">
       <h5>Order</h5>
       <hr/>
-      <div v-for="orderItem in order.orderItems">
+      <div v-for="orderItem in order.orderItem">
         <div class="row">
           <div class="col-md-2">
             {{orderItem.quantity}} 
           </div>
-          <div class="col-md-6">
+          <div class="col-md-5">
             {{itemsIndex[orderItem.idItem].description}} 
           </div>
           <div class="col-md-3">
-            {{orderItem.getPrice()}} 
+            {{formatMoney(orderItem.getPrice())}} 
+          </div>
+          <div class="col-md-2">
+            <span class="fa fa-minus" @click="order.deleteItem(orderItem)"></span> 
           </div>
         </div>
       </div>
       <hr/>
-      <h5>{{order.total}}</h5>
+      <h5>{{formatMoney(order.total)}}</h5>
+      <br/>
+      <input type="text" class="form-control" v-model="order.cpf"/>
+      <br/>
+      <button class="btn btn-success btn-lg" @click="placeOrder(order)">Place Order </button>
+      {{order}}
     </div>
   </div>
 </template>
