@@ -19,9 +19,9 @@ test("Deve criar um pedido com vários itens duplicados e eles devem ser agrupad
   order.addItem(new Item(3,"Cabo", 30, "R$ 30,00"));
   order.addItem(new Item(3,"Cabo", 30, "R$ 30,00"));
   order.addItem(new Item(3,"Cabo", 30, "R$ 30,00"));
-  expect(order.orderItem).toHaveLength(3);
-  expect(order.orderItem[2].quantity).toBe(3);
-  expect(order.orderItem[2].getPrice()).toBe(90);
+  expect(order.orderItems).toHaveLength(3);
+  expect(order.orderItems[2].quantity).toBe(3);
+  expect(order.orderItems[2].getPrice()).toBe(90);
 })
 
 test("Deve criar um pedido, adicionar itens e pagá-los", function () {
@@ -31,9 +31,9 @@ test("Deve criar um pedido, adicionar itens e pagá-los", function () {
   order.addItem(new Item(3,"Cabo", 30, "R$ 30,00"));
   order.addItem(new Item(3,"Cabo", 30, "R$ 30,00"));
   order.addItem(new Item(3,"Cabo", 30, "R$ 30,00"));
-  order.deleteItem(order.orderItem[2]);
+  order.deleteItem(order.orderItems[2]);
   const total = order.getTotal();
   expect(total).toBe(6060);
-  expect(order.orderItem[2].quantity).toBe(2);
-  expect(order.orderItem[2].getPrice()).toBe(60);
+  expect(order.orderItems[2].quantity).toBe(2);
+  expect(order.orderItems[2].getPrice()).toBe(60);
 })
